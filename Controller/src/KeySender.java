@@ -13,10 +13,11 @@ public class KeySender extends JPanel implements KeyListener {
     private final Set<Integer> pressedKeys = new HashSet<>();
     private Timer stopTimer;
     private SpeedSetting speedSetting = SpeedSetting.MEDIUM;
+    private HttpURLConnection connection;
 
     public KeySender() {
         JFrame frame = new JFrame("ESP32 Drive Base Controller");
-        setSize(400, 300);
+        frame.setSize(400, 300);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -37,7 +38,7 @@ public class KeySender extends JPanel implements KeyListener {
         stopTimer.start();
     }
 
-    private void sendCommand(String command) {
+    /*private void sendCommand(String command) {
         try {
             URL url = new URL(ESP32_IP + command);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -46,6 +47,22 @@ public class KeySender extends JPanel implements KeyListener {
             connection.setReadTimeout(3000);
             connection.getResponseCode(); // Send the request
             connection.disconnect();
+        } catch (Exception e) {
+            System.out.println("Error sending command: " + e.getMessage());
+        }
+    }*/
+
+    private void sendCommand(String command) {
+        try {
+            if (connection == null || !connection.getURL().toString().contains(command)) {
+                URL url = new URL(ESP32_IP + command);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(3000);
+                connection.setReadTimeout(3000);
+                connection.setRequestProperty("Connection", "keep-alive"); // Enable keep-alive
+            }
+            connection.getResponseCode(); // Send the request
         } catch (Exception e) {
             System.out.println("Error sending command: " + e.getMessage());
         }
