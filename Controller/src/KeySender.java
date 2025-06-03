@@ -30,7 +30,7 @@ public class KeySender extends JPanel implements KeyListener {
         addKeyListener(this);
     
         // Initialize the timer to send stop command if no keys are pressed
-        stopTimer = new Timer(100, e -> {
+        stopTimer = new Timer(50, e -> {
             if (pressedKeys.isEmpty()) {
                 sendCommand("/N");
             }
@@ -107,6 +107,8 @@ public class KeySender extends JPanel implements KeyListener {
                     }
                     repaint();
                     break;
+                case KeyEvent.VK_Q:
+                    System.exit(0);
                 default:
                     break;
             }
@@ -114,6 +116,18 @@ public class KeySender extends JPanel implements KeyListener {
                 sendCommand(command);
             }
         }
+    }
+
+    private void cleanup() {
+        if (connection != null) {
+            connection.disconnect();
+            connection = null;
+        }
+        if (stopTimer != null) {
+            stopTimer.stop();
+        }
+        sendCommand("/N");
+        System.out.println("Resources cleaned up.");
     }
 
     @Override
@@ -125,6 +139,7 @@ public class KeySender extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {}
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(KeySender::new);
+        KeySender main = new KeySender();
+        Runtime.getRuntime().addShutdownHook(new Thread(main::cleanup));
     }
 }

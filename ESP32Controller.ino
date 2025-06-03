@@ -4,13 +4,13 @@
 const char* ssid = "iPhone (2)";
 const char* password = "handGrenade";
 
-const int SLOW_SPEED_REDUCTION = 250;
-const int MED_SPEED_REDUCTION = 100;
+const int SLOW_SPEED_REDUCTION = 350;
+const int MED_SPEED_REDUCTION = 250;
 const int FAST_SPEED_REDUCTION = 0;
 
 WiFiServer server(80);
 
-int rightMotorPin = 2;
+int rightMotorPin = 22;
 int leftMotorPin = 12;
 
 /**Must be a value between 0 and 475*/
@@ -56,7 +56,7 @@ void loop() {
         else if(request.indexOf("/E") != -1) {
           int mode = request.substring(request.indexOf("/E") + 3, request.indexOf("/E") + 4).toInt();
           Serial.print("Speed mode changed to: ");
-          Serial.println(request.substring(request.indexOf("/E") + 3, request.indexOf("/E") + 4));
+          Serial.println(mode);
           if(mode == 1) {
             speedReduction = SLOW_SPEED_REDUCTION;
           }
@@ -83,26 +83,26 @@ void loop() {
 
 void moveForward() {
   Serial.println("Moving forward");
-  rightMotor.writeMicroseconds(2000-speedReduction);
-  leftMotor.writeMicroseconds(1000+speedReduction);
+  rightMotor.writeMicroseconds(1000+speedReduction);
+  leftMotor.writeMicroseconds(2000-speedReduction);
 }
 
 void moveBackward() {
   Serial.println("Moving backward");
-  rightMotor.writeMicroseconds(1000+speedReduction);
-  leftMotor.writeMicroseconds(2000-speedReduction);
+  rightMotor.writeMicroseconds(2000-speedReduction);
+  leftMotor.writeMicroseconds(1000+speedReduction);
 }
 
 void turnLeft() {
   Serial.println("Turning left");
-  rightMotor.writeMicroseconds(1000+speedReduction);
-  leftMotor.writeMicroseconds(1000+speedReduction);
+  rightMotor.writeMicroseconds(2000-speedReduction);
+  leftMotor.writeMicroseconds(2000-speedReduction);
 }
 
 void turnRight() {
   Serial.println("Turning right");
-  rightMotor.writeMicroseconds(2000-speedReduction);
-  leftMotor.writeMicroseconds(2000-speedReduction);
+  rightMotor.writeMicroseconds(1000+speedReduction);
+  leftMotor.writeMicroseconds(1000+speedReduction);
 }
 
 void stop() {
