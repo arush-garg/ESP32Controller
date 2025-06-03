@@ -1,5 +1,4 @@
 import javax.swing.*;
-
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.net.*;

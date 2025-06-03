@@ -1,8 +1,8 @@
 #include <WiFi.h>
 #include <ESP32Servo.h>
 
-const char* ssid = "iPhone (2)";
-const char* password = "handGrenade";
+const char* ssid = "YOUR_SSID";
+const char* password = "YOUR_PASSWORD";
 
 const int SLOW_SPEED_REDUCTION = 350;
 const int MED_SPEED_REDUCTION = 250;
